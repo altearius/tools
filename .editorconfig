@@ -1,0 +1,19 @@
+# EditorConfig is awesome: https://EditorConfig.org
+
+[*]
+end_of_line = crlf
+indent_style = tab
+indent_size = 2
+charset = utf-8
+trim_trailing_whitespace = true
+insert_final_newline = true
+
+# Some file types are controlled by external tools that have their own ideas
+# about whitespace.  To keep things consistent, we will try to match their
+# settings as well.
+[package.json]
+indent_style = space
+
+# Spaces and tabs can alter Markdown in unexpected ways, best to use spaces.
+[*.md]
+indent_style = space

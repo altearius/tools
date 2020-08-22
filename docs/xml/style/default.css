@@ -1,0 +1,117 @@
+﻿html {
+	background-color: #193441;
+	color: #FCFFF5;
+}
+body {
+	text-align: left;
+	margin: 0 1em;
+}
+
+.ft p { margin-bottom: 1em; }
+caption { text-align: left; font-family: small-caption; margin-bottom: 0px; }
+th, td  { border: 1px solid #D1DBBD; vertical-align: top; }
+pre { margin-bottom: 0px; }
+a { color: #40E0D0; }
+button { width: 120px; }
+ol { margin-left: 3em; }
+
+#outputOptions {
+	font-size: x-small;
+}
+
+#opt_savedLink {
+	text-align: center;
+}
+
+#xslInput,
+#xpathInput,
+#xmlInput,
+#outputXPath,
+#output {
+	white-space: pre;
+	font-family: Consolas, "Courier New", monospace;
+}
+
+/** Syntax highlighting **/
+.syntax .error           { color: red; }
+.syntax .piName,
+.syntax .element         { color: yellow; font-weight: bold; }
+.syntax .attributeName   { color: rgb(  0, 255, 255); }
+.syntax .attributeValue  { color: rgb(235, 251, 198); }
+.syntax .comment,
+.syntax .piData,
+.syntax .cdata           { color: rgb(202, 202, 202); }
+.syntax .empty           { color: rgb(202, 202, 202); font-style: italic; }
+.syntax .entity          { color: lime; }
+
+.syntax .highlighted { background-color: Highlight; color: HighlightText; }
+.syntax .highlighted .piName,
+.syntax .highlighted .element,
+.syntax .highlighted .attributeName,
+.syntax .highlighted .attributeValue,
+.syntax .highlighted .comment,
+.syntax .highlighted .piData,
+.syntax .highlighted .cdata,
+.syntax .highlighted .empty,
+.syntax .highlighted .entity {
+	color: HighlightText;
+}
+
+
+
+/** Tree view tomfoolery **/
+body.treeView #output ul { margin: 0 0 0 1em; }
+body.treeView #output li { list-style: none;  }
+body.treeView #output span.element { cursor: pointer; }
+
+/** Layout (some values are calculated; handled in LAYOUT.js */
+#options {
+	margin-left: 5px;
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	width: 120px;
+}
+
+#output {
+	overflow-y: scroll;
+	overflow-x: scroll;
+	border-top: 1px solid white;
+	border-left: 1px solid white;
+}
+
+#xslInput,
+#xpathInput,
+#xmlInput {
+	border: 1px solid white;
+	background-color: #3E606F;
+	color: #FCFFF5;
+}
+
+#xmlContainer,
+#xmlInput,
+#xpathContainer,
+#xslContainer,
+#xslInput,
+#outputContainer,
+#output,
+#outputXPath { position: absolute; }
+
+#xmlContainer   { top: 0px; left: 130px; }
+#xpathContainer { top: 0px; }
+#outputXPath    { left: 130px; }
+
+body.beautify #outputOptions #outputAsList,
+body.beautify #xpathContainer,
+body.beautify #xslContainer { display: none;  }
+body.beautify #outputXPath { display: block; }
+
+body.xPath #xpathContainer { display: block; }
+body.xPath #outputOptions #outputAsTree,
+body.xPath #xslContainer,
+body.xPath #outputXPath { display: none; }
+
+body.xsl #outputOptions #outputAsList,
+body.xsl #outputXPath,
+body.xsl #xpathContainer { display: none;  }
+body.xsl #xslContainer { display: block; }

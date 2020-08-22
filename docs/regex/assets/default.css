@@ -1,0 +1,43 @@
+﻿html {
+	background-color: #193441;
+	color: #FCFFF5;
+}
+
+body {
+	text-align: left;
+	margin: 0 1em;
+}
+
+.ft p { margin-bottom: 1em; }
+caption { text-align: left; font-family: small-caption; margin-bottom: 0px; }
+th, td  { border: 1px solid #D1DBBD; vertical-align: top; }
+pre { margin-bottom: 0px; }
+a { color: #40E0D0; }
+
+#reReplacement,
+#reInput {
+	width: 90%;
+	background-color: #3E606F;
+	color: #FCFFF5;
+	font-family: Consolas, monospace;
+	font-size: medium;
+}
+
+#reExp {
+	width: 90%;
+	background-color: #3E606F;
+	color: #FCFFF5;
+	font-size: large;
+	font-family: Consolas, monospace;
+}
+
+.ERR        { color: #FF0000; font-weight: bold; }
+.NULL,
+.UNDEF,
+.EMPTY      { color: #91AA9D; font-style: italic; }
+.NUM        { color: #7FFF00; }
+.HEX        { color: #DEB887; }
+.LITERAL    { color: #00FFFF; }
+#reLiteral  { color: #DEB887; font: caption; }
+table.OBJ   { background-color: #22353C; }
+td.SUB      { padding-left: 5em; }

@@ -1,0 +1,206 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<title>XML Utilities</title>
+
+	<script type="text/javascript">
+		/*global window, document */
+		/*jslint maxlen: 360 */
+	</script>
+
+	<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+	<meta name="robots" content="index,follow"/>
+	<meta name="description" content="Provides a set of developer tools for working with XML. This page can beautify (pretty-print) XML, apply arbitrary xPaths to an XML document, and apply an XSL stylesheet to an XML document. All work is done by the browser, in javascript." />
+	<meta name="keywords" content="xml, xsl, xslt, xpath, beautify, pretty print, developer tool, xpath tester online" />
+
+	<!--
+	TODO:
+	<link rel="canonical" href="http://chris.photobooks.com/xml/default.htm" />
+	-->
+
+	<!--
+	These files make up "minimized.css", in this order:
+	<link rel="stylesheet" type="text/css" href="style/reset.css" />
+	<link rel="stylesheet" type="text/css" href="style/fonts.css" />
+	<link rel="stylesheet" type="text/css" href="style/base.css" />
+	<link rel="stylesheet" type="text/css" href="style/default.css" />
+
+	These files make up "concatenated.js", in this order:
+	<script type="text/javascript" src="/library/jquery-1.6.js"></script>
+	<script type="text/javascript" src="/library/JSON-js/json2.js"></script>
+	<script type="text/javascript" src="script/Base.js"></script>
+	<script type="text/javascript" src="script/QueryString.js"></script>
+	<script type="text/javascript" src="script/SavedState.js"></script>
+	<script type="text/javascript" src="script/Cookie.js"></script>
+	<script type="text/javascript" src="script/XML.js"></script>
+	<script type="text/javascript" src="script/layout.js"></script>
+	<script type="text/javascript" src="script/beautify.js"></script>
+	<script type="text/javascript" src="script/xpath.js"></script>
+	<script type="text/javascript" src="script/xslt.js"></script>
+
+	Feel free to poke around.  This work is under the Creative Commons:
+	http://creativecommons.org/licenses/by-sa/3.0/
+	-->
+
+	<link rel="stylesheet" type="text/css" href="style/minimized.css" />
+	<script type="text/javascript" src="script/concatenated.js" defer="defer"></script>
+
+</head>
+<body class="beautify rawView">
+
+<!--
+To do:
+ 1. Utilize HTML5 for background processing.
+    Blocked: Neither Gears nor HTML5 supports XML objects on background
+    threads, so unless I want to build my own parser (uh, no)...
+ 2. Utilize HTML5 to enable users to drag / drop a file and render its
+    contents.  This would be SO COOL.
+ 3. XSD schema validation?? Man, who uses that? No "easy" way to do this in JS
+    that I can see. This may require server-side processing, but can that be
+    done safely?  What if somebody uploads a 100meg XML?  Is that going to take
+    100meg of server RAM? Are there security issues to worry about? What about
+    user trust (i.e., why would they want to give me their xml files?)
+ 4. Server-side XSL / xPath? Can this be done securely? See above concerns!
+-->
+
+	<div id="xmlContainer">
+		<h2>
+			<label for="xmlInput">XML Input:</label>
+		</h2>
+
+		<div>
+			<textarea id="xmlInput"
+				rows="10" cols="50"
+				spellcheck="false"
+				tabindex="10"></textarea>
+		</div>
+	</div>
+
+	<div id="xpathContainer">
+		<h2>
+			<label for="xpathInput">XPath Input:</label>
+		</h2>
+		<p>
+			<input type="text" id="xpathInput" tabindex="20" />
+		</p>
+		<div id="xPathNSContainer"></div>
+		<button id="xpathRefreshNS">Rescan</button>
+	</div>
+
+	<div id="xslContainer">
+		<h2>
+			<label for="xslInput">XSLT Input:</label>
+		</h2>
+		<p>
+			<textarea id="xslInput"
+				rows="10" cols="50"
+				spellcheck="false"
+				tabindex="30">&lt;?xml version="1.0" encoding="utf-8"?&gt;
+&lt;xsl:stylesheet version="1.0"
+	xmlns:xsl="http://www.w3.org/1999/XSL/Transform"&gt;
+	&lt;xsl:output method="xml" /&gt;
+
+	&lt;xsl:template match="@* | node()"&gt;
+		&lt;xsl:copy&gt;
+			&lt;xsl:apply-templates select="@* | node()"/&gt;
+		&lt;/xsl:copy&gt;
+	&lt;/xsl:template&gt;
+&lt;/xsl:stylesheet&gt;</textarea>
+		</p>
+	</div>
+
+	<div id="outputContainer">
+		<h2>
+			Output:
+			<span id="outputOptions">
+				<a href="#null">select all</a>
+				<a href="#null" id="outputAsTree">tree view</a>
+				<a href="#null" id="outputAsList">list view</a>
+				<a href="#null" id="outputAsRaw">raw view</a>
+			</span>
+		</h2>
+		<div id="output" class="syntax"></div>
+	</div>
+
+	<div id="options">
+		<h2>Options</h2>
+		<p>
+			<label>
+				<input type="radio"
+					name="mode"
+					value="beautify"
+					checked="checked"
+					tabindex="50"
+					accesskey="b" />
+				Beautify
+			</label><br />
+			<label>
+				<input type="radio"
+					name="mode"
+					value="xPath"
+					tabindex="60"
+					accesskey="p" />
+				XPath
+			</label>
+			<br />
+			<label>
+				<input type="radio"
+					name="mode"
+					value="xsl"
+					tabindex="70"
+					accesskey="x" />
+				XSLT
+			</label>
+		</p>
+
+		<button id="opt_render"
+			tabindex="40" accesskey="r">Render</button>
+
+		<button id="opt_save">Link To This</button>
+
+		<p id="opt_savedLink">&#160;</p>
+
+		<h3>Contact Me</h3>
+		<p>
+			<a href="mailto:nielsen.chris@gmail.com">nielsen.chris</a><br />
+			<a href="http://chris-nielsen.blogspot.com/">Entropy Reduction</a>
+		</p>
+
+		<h3>See Also</h3>
+		<p>
+			<a href="../json/default.html">JSON Utilities</a><br />
+			<a href="../regex/default.html">RegEx Utilities</a>
+		</p>
+
+	</div>
+
+	<!-- Display the xPath of an element when the user clicks on it in the
+	     output of a "Beautify" render. -->
+	<div id="outputXPath" class="syntax"></div>
+
+	<script type="text/javascript" defer="defer">
+		/*jslint nomen: false */
+		if (
+			window.location.hostname.substring(0, 6).toLowerCase() !== 'local.'
+		) {
+			var _gaq = _gaq || [];
+			_gaq.push(['_setAccount', 'UA-5037510-1']);
+			_gaq.push(['_trackPageview']);
+			_gaq.push(['_trackPageLoadTime']);
+
+			(function () {
+				var s, ga = document.createElement('script');
+				ga.type = 'text/javascript';
+				ga.async = true;
+				ga.src =
+					((document.location.protocol === 'https:') ?
+					'https://ssl' : 'http://www') +
+					'.google-analytics.com/ga.js';
+				s = document.getElementsByTagName('script')[0];
+				s.parentNode.insertBefore(ga, s);
+			}());
+		}
+		/*jslint nomen: true */
+	</script>
+</body>
+</html>

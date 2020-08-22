@@ -1,0 +1,199 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" >
+<head>
+	<title>Regular Expression Tester</title>
+	<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+	<meta name="robots" content="index,follow"/>
+	<meta name="description" content="Regular Expression Tool, capable of deconstructing and explaining what any regex does, token by token. Also capable of executing any regex against arbitrary content." />
+	<meta name="keywords" content="regular expression, regex, regexp, developer tool, explain regex" />
+
+	<!--
+	TODO
+	<link rel="canonical" href="http://chris.photobooks.com/regex/default.htm" />
+	-->
+
+	<link rel="stylesheet" type="text/css" href="assets/reset-fonts-grids.css" />
+	<link rel="stylesheet" type="text/css" href="assets/base-min.css" />
+	<link rel="stylesheet" type="text/css" href="assets/default.css" />
+	<script src="assets/yuiloader-dom-event.js"></script>
+	<script>
+		var Dom = YAHOO.util.Dom;
+		var Event = YAHOO.util.Event;
+		var Lang = YAHOO.util.Lang;
+		var $ = function (id) { return document.getElementById(id); };
+	</script>
+	<script src="assets/default-min.js"></script>
+</head>
+<body>
+<!--
+
+TODO items:
+Adjust layout, it is currently quite ugly.
+
+Once parsed, we can cache a regex until the expression text changes.
+   Suspect that comparing the regex source strings will be faster than
+   recreating a new regex every time.
+
+Support fancy highlighting and whatnot to show which parts of a regex
+match which parts of a string.
+
+-->
+	<div id="doc3" class="yui-t2">
+
+		<div id="hd">
+			<h1>Regular Expression Tester</h1>
+		</div>
+
+		<div id="bd">
+
+			<div id="yui-main">
+				<div class="yui-b">
+					<div class="yui-g">
+
+						<h2 style="margin-top: 0px;">
+							<label for="reInput">Input:</label>
+						</h2>
+
+						<div style="width: 100%;">
+							<textarea id="reInput" rows="8" cols="50" spellcheck="false"></textarea>
+						</div>
+
+						<h2>
+							<label for="reExp">Expression:</label>
+						</h2>
+
+						<div style="width: 100%">
+							<input id="reExp" type="text" />
+						</div>
+
+						<div id="replaceContainer" style="width: 100%; display: none;">
+							<label>
+								<h2>Replacement:</h2>
+								<textarea id="reReplacement" rows="4" cols="50" spellcheck="false"></textarea>
+							</label><br />
+							<label>
+								<input type="checkbox" id="optReplaceFunction" />
+								Treat as JavaScript function
+							</label>
+						</div>
+
+						<h2 id="reOutLabel">Output:</h2>
+						<div id="reLiteral"></div>
+						<div id="reOutput"></div>
+
+					</div>
+				</div>
+			</div>
+
+			<div class="yui-b">
+
+				<h2 style="margin-top: 0px;">Options:</h2>
+
+				<p>
+					<label>
+						<input type="checkbox" id="optGlobal" value="1" />
+						Global
+					</label><br />
+					<label>
+						<input type="checkbox" id="optIgnoreCase" value="1" />
+						Ignore Case
+					</label><br />
+					<label>
+						<input type="checkbox" id="optMultiLine" value="1" />
+						Multiple Lines
+					</label>
+				</p>
+
+				<hr />
+
+				<p>
+					<label>
+						<input type="checkbox" id="optUpdate" value="1" />
+						Update While Typing
+					</label><br />
+					<label>
+						<input type="checkbox" id="optTrunc" value="1" />
+						Truncate Long Strings
+					</label><br />
+					<label>
+						<input type="radio" id="optExecute" name="action" value="execute" checked="checked" />
+						Execute
+					</label><br />
+					<label>
+						<input type="radio" id="optExplain" name="action" value="explain" />
+						Explain
+					</label><Br />
+					<label>
+						<input type="radio" id="optReplace" name="action" value="replace" />
+						Replace
+					</label>
+				</p>
+
+				<hr />
+
+				<p>
+					<button type="button" id="cmdUpdate">Update</button>
+					<button type="button" id="cmdClear">Clear</button>
+				</p>
+
+				<hr />
+
+				<h2>Help</h2>
+
+				<p>
+					Execution is performed using your browser's javascript's regex engine.
+				</p>
+
+				<p>
+					Explanation is done according to the
+					<a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/RegExp">Mozilla
+					RegExp Reference</a>.  This obviously may not match the regular expression flavor that you are using.
+				</p>
+
+				<p>
+					Please <a href="mailto:nielsen.chris@gmail.com">let me know</a> if you
+					find a bug, or if I've missed something, or if you have an idea for
+					something to add.
+				</p>
+
+			</div>
+		</div>
+
+		<div id="ft">
+			<address class="hcard">
+				<span class="fn">Chris Nielsen</span><br />
+				<a class="email" href="mailto:nielsen.chris@gmail.com">nielsen.chris@gmail.com</a>
+			</address>
+			<p>
+				2010-10-18: Quantifer description now includes greedy flag.<br />
+				See Also: <a href="../json/default.html">JSON Visualization</a> and
+				<a href="../xml/default.html">XML Utilities</a>
+			</p>
+		</div>
+
+	</div>
+
+	<script type="text/javascript">
+		if (
+			window.location.hostname.substring(0, 6).toLowerCase() !== 'local.'
+		) {
+			var _gaq = _gaq || [];
+			_gaq.push(['_setAccount', 'UA-5037510-1']);
+			_gaq.push(['_trackPageview']);
+			_gaq.push(['_trackPageLoadTime']);
+
+			(function () {
+				var s, ga = document.createElement('script');
+				ga.type = 'text/javascript';
+				ga.async = true;
+				ga.src =
+					((document.location.protocol === 'https:') ?
+						'https://ssl' : 'http://www') +
+						'.google-analytics.com/ga.js';
+				s = document.getElementsByTagName('script')[0];
+				s.parentNode.insertBefore(ga, s);
+			}());
+		}
+	</script>
+</body>
+</html>
